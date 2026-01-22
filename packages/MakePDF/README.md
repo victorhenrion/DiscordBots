@@ -21,7 +21,7 @@ MAKEPDF_DISCORD_TOKEN=your_discord_token
 MAKEPDF_SETTINGS_FORMATS=doc,docx,odt,rtf,ppt,pps,pptx,ppsx,odp,xls,xlsx,ods,csv
 ```
 
-Then install the bot with `npm install` & start it with `npm start`
+Then install the bot with `yarn install` & start it with `yarn start`
 You might want to use a process manager such as PM2 to keep the bot running
 
 ## Using the bot

@@ -18,7 +18,7 @@ VOICENOTIFY_FIREBASE_PROJECT_ID=your_firebase_project_id
 VOICENOTIFY_FIREBASE_DATABASE_URL=your_firebase_database_url
 ```
 
-Then install the bot with `npm install` & start it with `npm start`
+Then install the bot with `yarn install` & start it with `yarn start`
 You might want to use a process manager such as PM2 to keep the bot running
 
 ## Using the bot
