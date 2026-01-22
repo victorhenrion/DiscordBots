@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // resolution
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "checkJs": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+
+    // type checking
+    "exactOptionalPropertyTypes": false,
+    "experimentalDecorators": true,
+    "lib": ["ES2024"],
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
+
+    // emission
+    "module": "NodeNext",
+    "noEmit": true,
+
+    // paths
+    "rootDir": ".",
+    "types": ["@types/node"]
+  },
+  "include": ["src"]
+}

@@ -2,11 +2,11 @@
   "apps": [
     {
       "name": "MakePDF",
-      "script": "./packages/MakePDF/src/makepdf.js"
+      "script": "node ./packages/MakePDF/src/makepdf.ts"
     },
     {
       "name": "VoiceNotify",
-      "script": "./packages/VoiceNotify/src/voicenotify.js"
+      "script": "node ./packages/VoiceNotify/src/voicenotify.ts"
     }
   ]
 }

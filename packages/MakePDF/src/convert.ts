@@ -1,21 +1,22 @@
+import { execFile } from 'node:child_process'
+import { access, readFile, writeFile } from 'node:fs'
+import { join } from 'node:path'
 import async from 'async'
-import { execFile } from 'child_process'
-import { access, readFile, writeFile } from 'fs'
-import { join } from 'path'
 import { dirSync } from 'tmp'
 
-const convertWithOptions = (document, format, filter, options, callback) => {
-  const tmpOptions = (options || {}).tmpOptions || {}
-  const asyncOptions = (options || {}).asyncOptions || {}
+export const convert = (
+  document: ArrayBuffer,
+  format: `.${string}`,
+  callback: (error: Error | null, result: ArrayBuffer | null) => void,
+) => {
   const tempDir = dirSync({
     prefix: 'libreofficeConvert_',
     unsafeCleanup: true,
-    ...tmpOptions,
   })
+
   const installDir = dirSync({
     prefix: 'soffice',
     unsafeCleanup: true,
-    ...tmpOptions,
   })
   return async.auto(
     {
@@ -27,7 +28,7 @@ const convertWithOptions = (document, format, filter, options, callback) => {
             break
           case 'linux':
             paths = [
-              process.env.OFFICE_PATH.replace('opt', 'usr/bin'),
+              (process.env.OFFICE_PATH || '/opt/libreoffice').replace('opt', 'usr/bin'),
               '/usr/bin/libreoffice',
               '/usr/bin/soffice',
               '/snap/bin/libreoffice',
@@ -35,9 +36,9 @@ const convertWithOptions = (document, format, filter, options, callback) => {
             break
           case 'win32':
             paths = [
-              join(process.env['PROGRAMFILES(X86)'], 'LIBREO~1/program/soffice.exe'),
-              join(process.env['PROGRAMFILES(X86)'], 'LibreOffice/program/soffice.exe'),
-              join(process.env.PROGRAMFILES, 'LibreOffice/program/soffice.exe'),
+              join(process.env['PROGRAMFILES(X86)'] || 'C:\\Program Files (x86)', 'LIBREO~1/program/soffice.exe'),
+              join(process.env['PROGRAMFILES(X86)'] || 'C:\\Program Files (x86)', 'LibreOffice/program/soffice.exe'),
+              join(process.env.PROGRAMFILES || 'C:\\Program Files', 'LibreOffice/program/soffice.exe'),
             ]
             break
           default:
@@ -48,23 +49,20 @@ const convertWithOptions = (document, format, filter, options, callback) => {
           paths,
           (filePath, callback) => access(filePath, (err) => callback(null, !err)),
           (err, res) => {
-            if (err || res.length === 0) {
-              return callback(new Error('Could not find soffice binary'))
+            if (err || !res || res.length === 0) {
+              return callback(new Error('Could not find soffice binary'), null)
             }
 
             return callback(null, res[0])
           },
         )
       },
-      saveSource: (callback) => writeFile(join(tempDir.name, 'source'), document, callback),
+      saveSource: (callback) => writeFile(join(tempDir.name, 'source'), Buffer.from(document), callback),
       convert: [
         'soffice',
         'saveSource',
-        (results, callback) => {
+        (results: any, callback) => {
           let command = `-env:UserInstallation=file://${installDir.name} --headless --convert-to ${format}`
-          if (filter !== undefined) {
-            command += `:"${filter}"`
-          }
           command += ` --outdir ${tempDir.name} ${join(tempDir.name, 'source')}`
           const args = command.split(' ')
           return execFile(results.soffice, args, callback)
@@ -72,11 +70,11 @@ const convertWithOptions = (document, format, filter, options, callback) => {
       ],
       loadDestination: [
         'convert',
-        (results, callback) =>
+        (_results, callback) =>
           async.retry(
             {
-              times: asyncOptions.times || 3,
-              interval: asyncOptions.interval || 200,
+              times: 3,
+              interval: 200,
             },
             (callback) => readFile(join(tempDir.name, `source.${format.split(':')[0]}`), callback),
             callback,
@@ -88,16 +86,14 @@ const convertWithOptions = (document, format, filter, options, callback) => {
       installDir.removeCallback()
 
       if (err) {
-        return callback(err)
+        return callback(err, null)
+      }
+
+      if (!res) {
+        return callback(new Error('No result from conversion'), null)
       }
 
       return callback(null, res.loadDestination)
     },
   )
 }
-
-const convert = (document, format, filter, callback) => {
-  return convertWithOptions(document, format, filter, {}, callback)
-}
-
-export { convert, convertWithOptions }
