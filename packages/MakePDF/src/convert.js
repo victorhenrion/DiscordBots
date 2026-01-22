@@ -1,6 +1,6 @@
 import async from 'async'
 import { execFile } from 'child_process'
-import { access, writeFile, readFile } from 'fs'
+import { access, readFile, writeFile } from 'fs'
 import { join } from 'path'
 import { dirSync } from 'tmp'
 
@@ -53,7 +53,7 @@ const convertWithOptions = (document, format, filter, options, callback) => {
             }
 
             return callback(null, res[0])
-          }
+          },
         )
       },
       saveSource: (callback) => writeFile(join(tempDir.name, 'source'), document, callback),
@@ -79,7 +79,7 @@ const convertWithOptions = (document, format, filter, options, callback) => {
               interval: asyncOptions.interval || 200,
             },
             (callback) => readFile(join(tempDir.name, `source.${format.split(':')[0]}`), callback),
-            callback
+            callback,
           ),
       ],
     },
@@ -92,7 +92,7 @@ const convertWithOptions = (document, format, filter, options, callback) => {
       }
 
       return callback(null, res.loadDestination)
-    }
+    },
   )
 }
 

@@ -1,6 +1,4 @@
-/* eslint-disable eqeqeq */
-
-import { Client, WebhookClient, MessageAttachment, MessageEmbed } from 'discord.js'
+import { Client, MessageAttachment, MessageEmbed, WebhookClient } from 'discord.js'
 import { get, request } from 'https'
 
 import { convert } from './convert.js'
@@ -20,15 +18,15 @@ const lastRestart = Date.now()
 
 client.on('message', async (msg) => {
   const { author, attachments, channel } = msg
-  const { mentions, guild, member, content } = msg //required by debug command
+  const { mentions, guild, member, content } = msg // required by debug command
 
   if (author.id == client.user.id) return
 
-  if (content.includes('debug'))
+  if (content.includes('debug')) {
     if (
-      channel.type == 'dm' ||
-      (mentions?.has(guild?.me, { ignoreEveryone: true }) && member?.hasPermission('ADMINISTRATOR'))
-    )
+      channel.type == 'dm'
+      || (mentions?.has(guild?.me, { ignoreEveryone: true }) && member?.hasPermission('ADMINISTRATOR'))
+    ) {
       return msg.reply(
         new MessageEmbed()
           .setTitle('MakePDF – Debug')
@@ -42,14 +40,16 @@ client.on('message', async (msg) => {
             **guildId :** ${msg.guild?.id}
             **memberId :** ${author.id}
             **channelId :** ${channel.id}
-            `
-          )
+            `,
+          ),
       )
+    }
+  }
 
   const filesArray = attachments.array()
 
-  filesArray.length > 0 &&
-    filesArray.forEach(({ name, url }) => {
+  filesArray.length > 0
+    && filesArray.forEach(({ name, url }) => {
       if (!url) return
 
       const formats = process.env.MAKEPDF_SETTINGS_FORMATS.split(',')
@@ -85,8 +85,8 @@ client.on('message', async (msg) => {
 const updateGuildCount = (server_count) => {
   client.user.setActivity(`${server_count} servers ⚡`, { type: 'WATCHING' })
   try {
-    process.env.MAKEPDF_TOPGG_TOKEN &&
-      request({
+    process.env.MAKEPDF_TOPGG_TOKEN
+      && request({
         hostname: 'top.gg',
         port: 443,
         path: `/api/bots/${process.env.MAKEPDF_BOT_ID}/stats`,
@@ -98,7 +98,7 @@ const updateGuildCount = (server_count) => {
       }).end(
         JSON.stringify({
           server_count,
-        })
+        }),
       )
   } catch (_e) {}
 }
@@ -113,7 +113,7 @@ client.on('guildDelete', () => updateGuildCount(client.guilds.cache.size))
 client.on('shardError', (e) => log(`Websocket connection error: ${e}`))
 process.on(
   'unhandledRejection',
-  (e) => e.code != 50013 && e.code != 50001 && log(`Unhandled promise rejection:\n\n${e.stack}\n\n${JSON.stringify(e)}`)
+  (e) => e.code != 50013 && e.code != 50001 && log(`Unhandled promise rejection:\n\n${e.stack}\n\n${JSON.stringify(e)}`),
 )
 
 client.login(process.env.MAKEPDF_DISCORD_TOKEN)

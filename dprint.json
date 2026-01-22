@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.95.13.wasm",
+    "https://plugins.dprint.dev/json-0.21.1.wasm"
+  ],
+  "indentWidth": 2,
+  "lineWidth": 140,
+  "typescript": {
+    "arrowFunction.useParentheses": "force",
+    "jsx.quoteStyle": "preferDouble",
+    "module.sortImportDeclarations": "maintain",
+    "quoteStyle": "alwaysSingle",
+    "semiColons": "asi"
+  },
+  "json": {
+    "lineWidth": 999
+  }
+}

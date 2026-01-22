@@ -1,9 +1,5 @@
-/* eslint-disable no-case-declarations */
-/* eslint-disable no-fallthrough */
-/* eslint-disable eqeqeq */
-
-import { Client, WebhookClient, MessageMentions, MessageEmbed, Intents, Permissions } from 'discord.js'
-import { initializeApp, cert } from 'firebase-admin/app'
+import { Client, Intents, MessageEmbed, MessageMentions, Permissions, WebhookClient } from 'discord.js'
+import { cert, initializeApp } from 'firebase-admin/app'
 import { getDatabase } from 'firebase-admin/database'
 import { request } from 'https'
 
@@ -40,16 +36,16 @@ initializeApp({
 const db = getDatabase()
 const lastRestart = Date.now()
 
-const thresholdTimes = new Map() //last threshold time per channel
-const broadcastTimes = new Map() //last broadcast time per channel
+const thresholdTimes = new Map() // last threshold time per channel
+const broadcastTimes = new Map() // last broadcast time per channel
 
 // settings management
 const manager = {
   cache: {},
   get: async (g, c) => (c ? (await manager.get(g))?.[c] : (manager.cache[g] ||= (await db.ref(g).once('value')).val())),
   set: async (g, c, s) =>
-    s &&
-    (await db
+    s
+    && (await db
       .ref(g)
       .child(c)
       .set(s)
@@ -57,14 +53,14 @@ const manager = {
   del: async (g, c) =>
     c
       ? await db
-          .ref(g)
-          .child(c)
-          .remove()
-          .then(() => delete manager.cache[g]?.[c])
+        .ref(g)
+        .child(c)
+        .remove()
+        .then(() => delete manager.cache[g]?.[c])
       : await db
-          .ref(g)
-          .remove()
-          .then(() => delete manager.cache[g]),
+        .ref(g)
+        .remove()
+        .then(() => delete manager.cache[g]),
 }
 
 client.on('voiceStateUpdate', async ({ channel: oldChannel }, { channel, guild }) => {
@@ -84,7 +80,7 @@ client.on('voiceStateUpdate', async ({ channel: oldChannel }, { channel, guild }
     textChannel = await guild.channels.fetch(settings.text)
   } catch (e) {
     return log(`Text channel "${settings.text}" unreachable. (${e.code}: ${e.message})`)
-    //return manager.del(guild.id, channel.id)
+    // return manager.del(guild.id, channel.id)
   }
 
   // exit if threshold is not reached
@@ -135,9 +131,9 @@ client.on('messageCreate', async (msg) => {
       }
       await manager.set(guild.id, member.voice.channelId, settings)
       return msg.reply(
-        `when ${settings.min} people or more are connected to "${
-          member.voice.channel.name
-        }", we will send an alert in <#${channel.id}> mentioning ${settings.roles?.length || '0'} role(s).`
+        `when ${settings.min} people or more are connected to "${member.voice.channel.name}", we will send an alert in <#${channel.id}> mentioning ${
+          settings.roles?.length || '0'
+        } role(s).`,
       )
 
     case 'disable':
@@ -163,7 +159,7 @@ client.on('messageCreate', async (msg) => {
               **lastThreshold :** ${thresholdTimes.get(member.voice?.channelId)}
               **lastBroadcast :** ${broadcastTimes.get(member.voice?.channelId)}
               **guildSettings :**\n\`\`\`${JSON.stringify(await manager.get(guild.id))}\`\`\`
-              `
+              `,
             ),
         ],
       })
@@ -188,8 +184,8 @@ Disables voice chat notifications for the voice channel you are in.
 const updateGuildCount = (server_count) => {
   client.user.setActivity(`${server_count} servers ⚡`, { type: 'WATCHING' })
   try {
-    process.env.VOICENOTIFY_TOPGG_TOKEN &&
-      request({
+    process.env.VOICENOTIFY_TOPGG_TOKEN
+      && request({
         hostname: 'top.gg',
         port: 443,
         path: `/api/bots/${process.env.VOICENOTIFY_BOT_ID}/stats`,
@@ -201,7 +197,7 @@ const updateGuildCount = (server_count) => {
       }).end(
         JSON.stringify({
           server_count,
-        })
+        }),
       )
   } catch (_e) {}
 }
@@ -219,7 +215,7 @@ client.on('guildDelete', ({ id }) => {
 client.on('shardError', (e) => log(`Websocket connection error: ${e}`))
 process.on(
   'unhandledRejection',
-  (e) => e.code != 50013 && e.code != 50001 && log(`Unhandled promise rejection:\n\n${e.stack}\n\n${JSON.stringify(e)}`)
+  (e) => e.code != 50013 && e.code != 50001 && log(`Unhandled promise rejection:\n\n${e.stack}\n\n${JSON.stringify(e)}`),
 )
 
 client.login(process.env.VOICENOTIFY_DISCORD_TOKEN)

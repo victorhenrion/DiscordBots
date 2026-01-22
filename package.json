@@ -3,9 +3,7 @@
   "version": "1.7.2",
   "type": "module",
   "scripts": {
-    "start": "npx pm2-runtime start pm2-apps.json",
-    "format": "prettier --write \"packages/**/*.{js,ts}\"",
-    "lint": "eslint packages --max-warnings=0 && prettier --check \"packages/**/*.{js,ts}\""
+    "start": "npx pm2-runtime start pm2-apps.json"
   },
   "repository": "github:vpctorr/DiscordBots",
   "author": "vpctorr <bonjour@victor.id> (https://victor.id)",
@@ -18,12 +16,9 @@
     "pm2": "^5.2.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.19.1",
-    "@babel/plugin-syntax-import-assertions": "^7.20.0",
+    "@biomejs/biome": "^2.3.11",
     "dotenv": "^16.0.3",
-    "eslint": "^8.32.0",
-    "eslint-config-universe": "^11.1.1",
-    "prettier": "^2.8.3"
+    "dprint": "^0.51.1"
   },
   "packageManager": "yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8"
 }
