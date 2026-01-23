@@ -2,9 +2,11 @@
 
 # VoiceNotify
 
-VoiceNotify is a Discord bot that notifies people when a voice chat is taking place. [Add to Discord](https://discord.com/oauth2/authorize?client_id=712670038267789352&scope=bot&permissions=150528)
+VoiceNotify is a Discord bot that notifies people when a voice chat is taking place.
 
-Self-hosting : [Stable](https://github.com/vpctorr/DiscordBots/tree/main/packages/VoiceNotify) • [Dev](https://github.com/vpctorr/DiscordBots/tree/dev/packages/VoiceNotify)
+[Add to Discord](https://discord.com/oauth2/authorize?client_id=712670038267789352&scope=bot&permissions=150528)
+•
+[View code](https://github.com/victorhenrion/DiscordBots/tree/main/packages/VoiceNotify)
 
 ### How to use the bot ?
 
@@ -22,9 +24,11 @@ Disables voice chat notifications for the voice channel you are in.
 
 # MakePDF
 
-MakePDF is a Discord bot that automatically converts word processing, spreadsheet and presentation documents to PDF. [Add to Discord](https://discord.com/oauth2/authorize?client_id=932278614911766599&scope=bot&permissions=52224)
+MakePDF is a Discord bot that automatically converts word processing, spreadsheet and presentation documents to PDF.
 
-Self-hosting : [Stable](https://github.com/vpctorr/DiscordBots/tree/main/packages/MakePDF) • [Dev](https://github.com/vpctorr/DiscordBots/tree/dev/packages/MakePDF)
+[Add to Discord](https://discord.com/oauth2/authorize?client_id=932278614911766599&scope=bot&permissions=52224)
+•
+[View code](https://github.com/victorhenrion/DiscordBots/tree/main/packages/MakePDF)
 
 ### Common formats are supported :
 

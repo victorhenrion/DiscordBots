@@ -1,12 +1,12 @@
 {
   "name": "discordbots",
-  "version": "1.7.2",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "start": "pm2-runtime start pm2-apps.json"
   },
-  "repository": "github:vpctorr/DiscordBots",
-  "author": "vpctorr <bonjour@victor.id> (https://victor.id)",
+  "repository": "https://github.com/victorhenrion/DiscordBots",
+  "author": "Victor Henrion <bonjour@victor.id> (victorhenrion)",
   "license": "MIT",
   "workspaces": [
     "packages/MakePDF",
