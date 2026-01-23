@@ -10,6 +10,7 @@
   "author": "vpctorr <bonjour@victor.id> (https://victor.id)",
   "license": "MIT",
   "dependencies": {
+    "dayjs": "^1.11.19",
     "discord.js": "^14.25.1",
     "firebase-admin": "^13.6.0"
   },

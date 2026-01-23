@@ -1,4 +1,5 @@
 import assert from 'node:assert'
+import dayjs from 'dayjs'
 import { ActivityType, Client, DiscordjsError, EmbedBuilder, MessageMentions, WebhookClient } from 'discord.js'
 import { cert, initializeApp } from 'firebase-admin/app'
 import { getDatabase } from 'firebase-admin/database'
@@ -66,6 +67,7 @@ interface Settings {
 
 const thresholdTimes = new Map<string, number>() // last threshold time per channel
 const broadcastTimes = new Map<string, number>() // last broadcast time per channel
+const lastDonationAsked = new Map<string, number>() // last donation message time per guild
 
 // settings management
 const cache = new Map<string, Map<string, Settings>>()
@@ -149,6 +151,10 @@ client.on('voiceStateUpdate', async ({ channel: oldChannel }, { channel, guild }
       .setTitle(`A voice chat is taking place in \`${channel.name}\` !`)
     if (settings.roles?.length) {
       embed.addFields({ name: '', value: `CC: ${settings.roles.join(' ')}` })
+    }
+    if (!lastDonationAsked.has(guild.id) || dayjs().diff(lastDonationAsked.get(guild.id)!, 'hours') > 24) {
+      embed.addFields({ name: '', value: `*VoiceNotify can't run without your support. [Donate](https://victor.id/donate)*` })
+      lastDonationAsked.set(guild.id, Date.now())
     }
     textChannel.send({ embeds: [embed] })
   }

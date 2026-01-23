@@ -1158,6 +1158,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dayjs@npm:^1.11.19":
+  version: 1.11.19
+  resolution: "dayjs@npm:1.11.19"
+  checksum: 10c0/7d8a6074a343f821f81ea284d700bd34ea6c7abbe8d93bce7aba818948957c1b7f56131702e5e890a5622cdfc05dcebe8aed0b8313bdc6838a594d7846b0b000
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:~1.8.24":
   version: 1.8.36
   resolution: "dayjs@npm:1.8.36"
@@ -1262,6 +1269,7 @@ __metadata:
   resolution: "discordbots-voicenotify@workspace:packages/VoiceNotify"
   dependencies:
     "@types/node": "npm:^25.0.10"
+    dayjs: "npm:^1.11.19"
     discord.js: "npm:^14.25.1"
     firebase-admin: "npm:^13.6.0"
   languageName: unknown
